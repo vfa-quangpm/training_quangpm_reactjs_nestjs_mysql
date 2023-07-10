@@ -8,15 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
+const data_config_1 = require("./config/data.config");
+const user_module_1 = require("./modules/user/user.module");
+const post_module_1 = require("./modules/post/post.module");
+const comment_module_1 = require("./modules/comment/comment.module");
+const auth_module_1 = require("./modules/auth/auth.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            typeorm_1.TypeOrmModule.forRootAsync(data_config_1.typeOrmConfigAsync),
+            user_module_1.UserModule,
+            post_module_1.PostModule,
+            comment_module_1.CommentModule,
+            auth_module_1.AuthModule,
+        ],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
