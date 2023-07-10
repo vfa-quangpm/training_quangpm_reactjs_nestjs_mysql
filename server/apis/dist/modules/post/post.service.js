@@ -18,22 +18,34 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const post_entity_1 = require("./entities/post.entity");
 const typeorm_2 = require("typeorm");
+const user_entity_1 = require("../user/entities/user.entity");
 let PostService = exports.PostService = PostService_1 = class PostService {
-    constructor(postRepository) {
+    constructor(postRepository, userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
         this.logger = new common_1.Logger(PostService_1.name);
     }
     async createPost(dto) {
-        return this.postRepository
-            .createQueryBuilder()
-            .insert()
-            .values(dto)
-            .execute();
+        this.logger.log(dto);
+        try {
+            const user = await this.userRepository.findOneBy({ id: dto.userId });
+            let { userId, ...post } = { user, ...dto };
+            post = this.postRepository.create(post);
+            await this.postRepository.save(post);
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Wrong something', {
+                cause: error,
+                description: 'Have a good day',
+            });
+        }
     }
 };
 exports.PostService = PostService = PostService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(post_entity_1.Post)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], PostService);
 //# sourceMappingURL=post.service.js.map

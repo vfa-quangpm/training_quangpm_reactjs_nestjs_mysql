@@ -19,45 +19,34 @@ let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async logIn(dto) {
+    async logIn(dto, res) {
         const access_token = await this.authService.logIn(dto);
-        if (access_token)
-            return {
-                message: 'Successfully!',
-                access_token,
-            };
-        throw new common_1.BadRequestException('Failing', {
-            cause: new Error(),
-            description: 'Exist username',
+        return res.json({
+            message: 'Successfully!',
+            access_token,
         });
     }
-    async register(dto) {
-        try {
-            await this.authService.register(dto);
-            return {
-                message: 'Successfully!',
-            };
-        }
-        catch (error) {
-            throw new common_1.BadRequestException('Failing', {
-                cause: error,
-                description: 'Exist username',
-            });
-        }
+    async register(dto, res) {
+        await this.authService.register(dto);
+        return res.json({
+            message: 'Successfully!',
+        });
     }
 };
 __decorate([
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logIn", null);
 __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 exports.AuthController = AuthController = __decorate([

@@ -5,11 +5,14 @@ import {
 	Logger,
 	Req,
 	BadRequestException,
+	HttpStatus,
+	HttpCode,
+	Res,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto, PostDto } from './dto/post.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('post')
 export class PostController {
@@ -18,13 +21,17 @@ export class PostController {
 
 	// Create Blog
 	@Post('create')
+	@HttpCode(HttpStatus.OK)
 	@UseGuards(AuthGuard)
-	async createPost(@Req() req: Request, dto: CreatePostDto): Promise<object> {
+	async createPost(
+		@Req() req: Request,
+		@Res() res: Response,
+		dto: CreatePostDto,
+	): Promise<Response> {
 		dto = { userId: req['user'], ...req.body };
-		if (await this.postService.createPost(dto)) return { message: 'nice' };
-		throw new BadRequestException('Failing', {
-			cause: new Error(),
-			description: 'Hahaha',
+		await this.postService.createPost(dto);
+		return res.json({
+			message: 'Successfully',
 		});
 	}
 }

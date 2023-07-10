@@ -22,13 +22,27 @@ let AuthService = exports.AuthService = AuthService_1 = class AuthService {
         this.logger = new common_1.Logger(AuthService_1.name);
     }
     async logIn(dto) {
+        this.logger.log('logIn...');
         const user = await this.userService.findOne(dto.username);
-        if (await bcrypt.compare(dto?.password, user.password))
+        const isCompare = await bcrypt.compare(dto?.password, user.password);
+        if (isCompare)
             return await this.jwtService.signAsync({ id: user.id });
-        return null;
+        throw new common_1.BadRequestException('Failing', {
+            cause: new Error(),
+            description: 'Exist username',
+        });
     }
     async register(dto) {
-        await this.userService.create(dto);
+        this.logger.log('register...');
+        try {
+            await this.userService.create(dto);
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Failing', {
+                cause: error,
+                description: 'Not exist username or password',
+            });
+        }
     }
 };
 exports.AuthService = AuthService = AuthService_1 = __decorate([

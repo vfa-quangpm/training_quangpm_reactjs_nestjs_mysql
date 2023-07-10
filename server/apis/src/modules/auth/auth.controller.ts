@@ -3,16 +3,11 @@ import {
 	Body,
 	Controller,
 	Post,
-	UnauthorizedException,
+	Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-	ApiBody,
-	ApiHeader,
-	ApiRequestTimeoutResponse,
-	ApiTags,
-} from '@nestjs/swagger';
 import { LoginUserDto, RegisterDto } from './dto/auth.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -20,32 +15,20 @@ export class AuthController {
 
 	// Login user
 	@Post('login')
-	async logIn(@Body() dto: LoginUserDto) {
+	async logIn(@Body() dto: LoginUserDto, @Res() res: Response) {
 		const access_token = await this.authService.logIn(dto);
-		if (access_token)
-			return {
-				message: 'Successfully!',
-				access_token,
-			};
-		throw new BadRequestException('Failing', {
-			cause: new Error(),
-			description: 'Exist username',
+		return res.json({
+			message: 'Successfully!',
+			access_token,
 		});
 	}
 
 	// Register USer
 	@Post('register')
-	async register(@Body() dto: RegisterDto) {
-		try {
-			await this.authService.register(dto);
-			return {
-				message: 'Successfully!',
-			};
-		} catch (error) {
-			throw new BadRequestException('Failing', {
-				cause: error,
-				description: 'Exist username',
-			});
-		}
+	async register(@Body() dto: RegisterDto, @Res() res: Response) {
+		await this.authService.register(dto);
+		return res.json({
+			message: 'Successfully!',
+		});
 	}
 }

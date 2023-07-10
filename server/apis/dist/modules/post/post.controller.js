@@ -22,22 +22,22 @@ let PostController = exports.PostController = PostController_1 = class PostContr
         this.postService = postService;
         this.logger = new common_1.Logger(PostController_1.name);
     }
-    async createPost(req, dto) {
+    async createPost(req, res, dto) {
         dto = { userId: req['user'], ...req.body };
-        if (await this.postService.createPost(dto))
-            return { message: 'nice' };
-        throw new common_1.BadRequestException('Failing', {
-            cause: new Error(),
-            description: 'Hahaha',
+        await this.postService.createPost(dto);
+        return res.json({
+            message: 'Successfully',
         });
     }
 };
 __decorate([
     (0, common_1.Post)('create'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "createPost", null);
 exports.PostController = PostController = PostController_1 = __decorate([

@@ -1,4 +1,9 @@
-import { BadRequestException, HttpException, Injectable, Logger } from '@nestjs/common';
+import {
+	BadRequestException,
+	HttpException,
+	Injectable,
+	Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -7,7 +12,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-	private readonly logger = new Logger(UserService.name)
+	private readonly logger = new Logger(UserService.name);
 	constructor(
 		@InjectRepository(User)
 		private usersRepository: Repository<User>,
@@ -16,11 +21,11 @@ export class UserService {
 	//Register User
 	async create(createUserDto: CreateUserDto): Promise<void> {
 		const hash = await bcrypt.hash(createUserDto.password, 10);
-		const {password, ...data} = createUserDto
+		const { password, ...data } = createUserDto;
 		await this.usersRepository
 			.createQueryBuilder()
 			.insert()
-			.values({password:hash, ...data})
+			.values({ password: hash, ...data })
 			.execute();
 	}
 
