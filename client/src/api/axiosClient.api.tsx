@@ -8,6 +8,10 @@ export const axiosClient = axios.create({
 	timeout: 3000,
 	headers: {},
 	withCredentials: true,
-	paramsSerializer: (params: Record<any, string>) =>
-		queryString.stringify(params),
+	paramsSerializer: (params) => queryString.stringify(params),
 })
+
+// middleware before request
+axiosClient.interceptors.request.use(async function (): Promise<void> {})
+
+// middleware before response
