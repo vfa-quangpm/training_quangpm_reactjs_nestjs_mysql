@@ -1,14 +1,12 @@
-import { Footer } from "./components/layout/footer"
-import Header from "./components/layout/header"
-import { Contain } from "./components/layout/main"
+import { BrowserRouter } from "react-router-dom"
+import Router from "./routers"
 
 function App() {
 	return (
-		<>
-			<Header />
-			<Contain />
-			<Footer />
-		</>
+		<BrowserRouter>
+			<Router />
+		</BrowserRouter>
 	)
 }
+
 export default App
