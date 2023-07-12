@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostService } from './post.service';
+import { FindPostDto } from './dto/post.dto';
 
 describe('PostService', () => {
 	let service: PostService;
@@ -19,4 +20,8 @@ describe('PostService', () => {
 	});
 
 	it('should be defined', () => {});
+	it('should be find post', () => {
+		const dto: FindPostDto = { title: 'hell' };
+		expect(service.findPost(dto)).toEqual({});
+	});
 });

@@ -1,5 +1,11 @@
 import { User } from '../../user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PostDto } from '../dto/post.dto';
 
 @Entity()
@@ -37,5 +43,6 @@ export class Post implements PostDto {
 	updateAt: Date;
 
 	@ManyToOne(() => User, (user) => user.posts)
+	@JoinColumn()
 	user: User;
 }

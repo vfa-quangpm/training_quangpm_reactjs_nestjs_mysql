@@ -40,6 +40,69 @@ let PostService = exports.PostService = PostService_1 = class PostService {
             });
         }
     }
+    async findPost(dto) {
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            where: [
+                {
+                    title: (0, typeorm_2.Like)(`%${dto}%`),
+                },
+            ],
+            order: {
+                createAt: 'DESC',
+            },
+        });
+        return { data: post };
+    }
+    async FindPostRead(dto) {
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                post: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            where: { id: dto.id },
+        });
+        return post;
+    }
+    async FindPostByPageLimit(dto) {
+        const { page, limit } = dto;
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                post: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            skip: (page - 1) * limit,
+            take: limit,
+            order: {
+                createAt: 'DESC',
+            },
+        });
+        return post;
+    }
+    async DeletePostById(dto) {
+        const data = await this.postRepository.delete({ id: dto.id });
+        return data;
+    }
 };
 exports.PostService = PostService = PostService_1 = __decorate([
     (0, common_1.Injectable)(),
