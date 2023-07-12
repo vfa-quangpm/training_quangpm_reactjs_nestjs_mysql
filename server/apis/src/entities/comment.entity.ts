@@ -1,25 +1,24 @@
-import { User } from '../../user/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PostDto } from '../dto/post.dto';
+import { CommentDto } from '../modules/comment/dto/comment.dto';
+import { User } from './user.entity';
+import { Post } from './post.entity';
 
 @Entity()
-export class Post implements PostDto {
+export class Comment implements CommentDto {
 	@PrimaryGeneratedColumn('uuid')
 	id: number;
 
-	@Column({
-		name: 'Title',
-		type: 'varchar',
-		length: 50,
-		unique: true,
-	})
-	title: string;
+	@ManyToOne(() => User, (author) => author.id)
+	authorId: User;
+
+	@ManyToOne(() => Post, (post) => post.id)
+	postId: Post;
 
 	@Column({
-		name: 'Post',
+		name: 'Comment',
 		type: 'text',
 	})
-	post: string;
+	comment: string;
 
 	@Column({
 		name: 'CreateAt',
@@ -32,10 +31,6 @@ export class Post implements PostDto {
 		name: 'UpdateAt',
 		type: 'datetime',
 		update: true,
-		nullable: true,
 	})
 	updateAt: Date;
-
-	@ManyToOne(() => User, (user) => user.posts)
-	user: User;
 }

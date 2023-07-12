@@ -1,5 +1,5 @@
-import { User } from '../../user/entities/user.entity';
-import { PostDto } from '../dto/post.dto';
+import { User } from './user.entity';
+import { PostDto } from '../modules/post/dto/post.dto';
 export declare class Post implements PostDto {
     id: number;
     title: string;

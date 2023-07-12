@@ -1,6 +1,6 @@
-import { CommentDto } from '../dto/comment.dto';
-import { User } from '../../user/entities/user.entity';
-import { Post } from '../../post/entities/post.entity';
+import { CommentDto } from '../modules/comment/dto/comment.dto';
+import { User } from './user.entity';
+import { Post } from './post.entity';
 export declare class Comment implements CommentDto {
     id: number;
     authorId: User;
