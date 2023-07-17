@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const post_controller_1 = require("./post.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const post_entity_1 = require("./entities/post.entity");
-const user_entity_1 = require("../user/entities/user.entity");
+const post_entity_1 = require("../../entities/post.entity");
+const user_entity_1 = require("../../entities/user.entity");
 let PostModule = exports.PostModule = class PostModule {
 };
 exports.PostModule = PostModule = __decorate([

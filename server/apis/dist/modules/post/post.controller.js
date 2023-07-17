@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostController = void 0;
 const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
-const auth_guard_1 = require("../auth/auth.guard");
 let PostController = exports.PostController = PostController_1 = class PostController {
     constructor(postService) {
         this.postService = postService;
@@ -29,17 +28,70 @@ let PostController = exports.PostController = PostController_1 = class PostContr
             message: 'Successfully',
         });
     }
+    async findPost(req, res, dto) {
+        dto = req.body.title;
+        return res.json(await this.postService.findPost(dto));
+    }
+    async findPostByPageLimit(query, res) {
+        const data = await this.postService.FindPostByPageLimit(query);
+        return res.json({
+            data,
+            message: 'Successfully!',
+        });
+    }
+    async findPostByTitle(id, res) {
+        const post = await this.postService.FindPostRead({ id });
+        return res.json({ data: post, message: 'Successfully!' });
+    }
+    async deletePostById(id, res) {
+        const data = await this.postService.DeletePostById({ id });
+        return res.json({
+            data,
+            message: 'Successfully!',
+        });
+    }
 };
 __decorate([
     (0, common_1.Post)('create'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "createPost", null);
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "findPost", null);
+__decorate([
+    (0, common_1.Get)('page'),
+    __param(0, (0, common_1.Query)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "findPostByPageLimit", null);
+__decorate([
+    (0, common_1.Get)('/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "findPostByTitle", null);
+__decorate([
+    (0, common_1.Delete)(`/:id`),
+    __param(0, (0, common_1.Param)(`id`)),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "deletePostById", null);
 exports.PostController = PostController = PostController_1 = __decorate([
     (0, common_1.Controller)('post'),
     __metadata("design:paramtypes", [post_service_1.PostService])

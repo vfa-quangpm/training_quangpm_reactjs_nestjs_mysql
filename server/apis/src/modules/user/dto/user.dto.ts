@@ -1,5 +1,5 @@
-import { Comment } from '../../comment/entities/comment.entity';
-import { Post } from '../../post/entities/post.entity';
+import { Comment } from '../../../entities/comment.entity';
+import { Post } from '../../../entities/post.entity';
 
 enum UserRole {
 	ADMIN = 'admin',

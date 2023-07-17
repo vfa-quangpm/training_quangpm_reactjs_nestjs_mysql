@@ -1,9 +1,15 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { CreatePostDto, PostDto } from './dto/post.dto';
+import {
+	CreatePostDto,
+	DeletePostById,
+	FindPostByIdDto,
+	FindPostByPageLimit,
+	FindPostDto,
+} from './dto/post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from './entities/post.entity';
-import { InsertResult, Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
+import { Post } from '../../entities/post.entity';
+import { EntityManager, Like, Repository } from 'typeorm';
+import { User } from '../../entities/user.entity';
 
 @Injectable()
 export class PostService {
@@ -28,5 +34,76 @@ export class PostService {
 				description: 'Have a good day',
 			});
 		}
+	}
+
+	// Find Blog to Search
+	async findPost(dto: FindPostDto): Promise<object> {
+		const post = await this.postRepository.find({
+			select: {
+				id: true,
+				title: true,
+				createAt: true,
+				user: {
+					username: true,
+				},
+			},
+			relations: { user: true },
+			where: [
+				{
+					title: Like(`%${dto}%`),
+				},
+			],
+			order: {
+				createAt: 'DESC',
+			},
+		});
+		return { data: post };
+	}
+
+	//Find Post for start to read
+	async FindPostRead(dto: FindPostByIdDto): Promise<object> {
+		const post = await this.postRepository.find({
+			select: {
+				id: true,
+				title: true,
+				post: true,
+				createAt: true,
+				user: {
+					username: true,
+				},
+			},
+			relations: { user: true },
+			where: { id: dto.id },
+		});
+		return post;
+	}
+
+	// Find post by page and limit
+	async FindPostByPageLimit(dto: FindPostByPageLimit): Promise<object> {
+		const { page, limit } = dto;
+		const post = await this.postRepository.find({
+			select: {
+				id: true,
+				title: true,
+				post: true,
+				createAt: true,
+				user: {
+					username: true,
+				},
+			},
+			relations: { user: true },
+			skip: (page - 1) * limit,
+			take: limit,
+			order: {
+				createAt: 'DESC',
+			},
+		});
+		return post;
+	}
+
+	// Delete post by Id
+	async DeletePostById(dto: DeletePostById): Promise<object> {
+		const data = await this.postRepository.delete({ id: dto.id });
+		return data;
 	}
 }

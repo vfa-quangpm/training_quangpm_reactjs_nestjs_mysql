@@ -16,9 +16,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const post_entity_1 = require("./entities/post.entity");
+const post_entity_1 = require("../../entities/post.entity");
 const typeorm_2 = require("typeorm");
-const user_entity_1 = require("../user/entities/user.entity");
+const user_entity_1 = require("../../entities/user.entity");
 let PostService = exports.PostService = PostService_1 = class PostService {
     constructor(postRepository, userRepository) {
         this.postRepository = postRepository;
@@ -39,6 +39,69 @@ let PostService = exports.PostService = PostService_1 = class PostService {
                 description: 'Have a good day',
             });
         }
+    }
+    async findPost(dto) {
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            where: [
+                {
+                    title: (0, typeorm_2.Like)(`%${dto}%`),
+                },
+            ],
+            order: {
+                createAt: 'DESC',
+            },
+        });
+        return { data: post };
+    }
+    async FindPostRead(dto) {
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                post: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            where: { id: dto.id },
+        });
+        return post;
+    }
+    async FindPostByPageLimit(dto) {
+        const { page, limit } = dto;
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                post: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            skip: (page - 1) * limit,
+            take: limit,
+            order: {
+                createAt: 'DESC',
+            },
+        });
+        return post;
+    }
+    async DeletePostById(dto) {
+        const data = await this.postRepository.delete({ id: dto.id });
+        return data;
     }
 };
 exports.PostService = PostService = PostService_1 = __decorate([

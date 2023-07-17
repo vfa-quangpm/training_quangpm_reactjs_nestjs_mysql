@@ -13,6 +13,12 @@ const auth_service_1 = require("./auth.service");
 const user_module_1 = require("../user/user.module");
 const jwt_1 = require("@nestjs/jwt");
 const constants_1 = require("./constants");
+const typeorm_1 = require("@nestjs/typeorm");
+const user_entity_1 = require("../../entities/user.entity");
+const passport_1 = require("@nestjs/passport");
+const local_strategy_1 = require("./strategies/local.strategy");
+const at_strategy_1 = require("./strategies/at.strategy");
+const rt_strategy_1 = require("./strategies/rt.strategy");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
@@ -22,11 +28,12 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.register({
                 global: true,
                 secret: constants_1.jwtConstants.secret,
-                signOptions: { expiresIn: '60s' },
             }),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
+            passport_1.PassportModule,
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, at_strategy_1.AtStrategy, rt_strategy_1.RtStrategy],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

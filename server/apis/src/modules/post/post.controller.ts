@@ -4,15 +4,17 @@ import {
 	UseGuards,
 	Logger,
 	Req,
-	BadRequestException,
 	HttpStatus,
 	HttpCode,
 	Res,
+	Get,
+	Param,
+	Query,
+	Delete,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto, PostDto } from './dto/post.dto';
-import { AuthGuard } from '../auth/auth.guard';
-import { Request, Response } from 'express';
+import { CreatePostDto, FindPostDto } from './dto/post.dto';
+import { Request, Response, query } from 'express';
 
 @Controller('post')
 export class PostController {
@@ -22,7 +24,6 @@ export class PostController {
 	// Create Blog
 	@Post('create')
 	@HttpCode(HttpStatus.OK)
-	@UseGuards(AuthGuard)
 	async createPost(
 		@Req() req: Request,
 		@Res() res: Response,
@@ -32,6 +33,48 @@ export class PostController {
 		await this.postService.createPost(dto);
 		return res.json({
 			message: 'Successfully',
+		});
+	}
+
+	// Find Blog for search
+	@Get()
+	async findPost(
+		@Req() req: Request,
+		@Res() res: Response,
+		dto: FindPostDto,
+	): Promise<Response> {
+		dto = req.body.title;
+		return res.json(await this.postService.findPost(dto));
+	}
+	// Find Blog use page and limit
+	@Get('page')
+	async findPostByPageLimit(@Query() query, @Res() res: Response) {
+		const data = await this.postService.FindPostByPageLimit(query);
+		return res.json({
+			data,
+			message: 'Successfully!',
+		});
+	}
+	// Find Blog for get start to read
+	@Get('/:id')
+	async findPostByTitle(
+		@Param('id') id: number,
+		@Res() res: Response,
+	): Promise<object> {
+		const post = await this.postService.FindPostRead({ id });
+		return res.json({ data: post, message: 'Successfully!' });
+	}
+
+	// Delete Blog using id
+	@Delete(`/:id`)
+	async deletePostById(
+		@Param(`id`) id: number,
+		@Res() res: Response,
+	): Promise<object> {
+		const data = await this.postService.DeletePostById({ id });
+		return res.json({
+			data,
+			message: 'Successfully!',
 		});
 	}
 }
