@@ -1,34 +1,62 @@
 import {
-	BadRequestException,
 	Body,
 	Controller,
+	Get,
+	HttpCode,
+	HttpStatus,
+	Logger,
 	Post,
-	Res,
+	Request,
+	Response,
+	UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginUserDto, RegisterDto } from './dto/auth.dto';
-import { Response } from 'express';
+import { RegisterDto } from './dto/auth.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AtGuard } from './guards/at-auth.guard';
+import { RtGuard } from './guards/rt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
+	private readonly logger = new Logger();
 	constructor(private authService: AuthService) {}
 
 	// Login user
+	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	async logIn(@Body() dto: LoginUserDto, @Res() res: Response) {
-		const access_token = await this.authService.logIn(dto);
-		return res.json({
-			message: 'Successfully!',
-			access_token,
-		});
+	@HttpCode(HttpStatus.OK)
+	async login(@Request() req, @Response() res) {
+		this.logger.log(req.user);
+		const data = await this.authService.logIn(req.user);
+		return res.json({ data, message: 'Successfully!' });
 	}
-
-	// Register USer
+	// Logout user
+	@UseGuards(AtGuard)
+	@Get('logout')
+	@HttpCode(HttpStatus.OK)
+	async logout(@Request() req, @Response() res) {
+		await this.authService.logout(req.user);
+		return res.json({ message: 'Successfully!' });
+	}
+	//Refresh Token
+	@UseGuards(RtGuard)
+	@Get('refresh')
+	async getRefreshToken(@Request() req, @Response() res) {
+		const data = await this.authService.getRefreshToken(req.user);
+		return res.json({ data, message: 'Successfully!' });
+	}
+	//Get profile User
+	@UseGuards(AtGuard)
+	@Get('profile')
+	async getProfileUser(@Request() req, @Response() res) {
+		const data = await this.authService.getProfileUser(req.user);
+		return res.json({ data, message: 'Successfully!' });
+	}
+	//Register User
 	@Post('register')
-	async register(@Body() dto: RegisterDto, @Res() res: Response) {
+	@HttpCode(HttpStatus.OK)
+	async register(@Body() dto: RegisterDto, @Response() res) {
 		await this.authService.register(dto);
-		return res.json({
-			message: 'Successfully!',
-		});
+		return res.json({ message: true });
 	}
 }

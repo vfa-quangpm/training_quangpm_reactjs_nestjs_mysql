@@ -4,6 +4,7 @@
 /server/node_modules
 /server/apis/node_modules
 /server/apis/prisma/.env
+/server/apis/dist
 
 # Logs
 logs

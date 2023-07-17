@@ -6,6 +6,10 @@ const swagger_1 = require("@nestjs/swagger");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.setGlobalPrefix('api/v1');
+    app.enableCors({
+        origin: ['http://127.0.0.1:5173', 'http://localhost:5173'],
+        credentials: true,
+    });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('DEMO simple')
         .setDescription('The DEMO APIs description')
