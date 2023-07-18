@@ -1,14 +1,24 @@
+/* eslint-env node */
+require('@rushstack/eslint-patch/modern-module-resolution')
+
 module.exports = {
-  env: { browser: true, es2020: true },
-  extends: [
+  root: true,
+  'extends': [
+    'plugin:vue/vue3-essential',
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    '@vue/eslint-config-typescript'
   ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': 'warn',
-  },
+  overrides: [
+    {
+      files: [
+        'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}'
+      ],
+      'extends': [
+        'plugin:cypress/recommended'
+      ]
+    }
+  ],
+  parserOptions: {
+    ecmaVersion: 'latest'
+  }
 }
