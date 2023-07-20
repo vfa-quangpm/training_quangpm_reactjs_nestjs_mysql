@@ -30,7 +30,11 @@ export class AuthService {
 	) {}
 	async validateUser(username: string, password: string): Promise<any> {
 		const user = await this.userRepository.findOne({ where: { username } });
+<<<<<<< HEAD
 		const isCompare = await bcrypt.compare(password, user.password);
+=======
+		const isCompare = await bcrypt.compare(password, user?.password);
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 		if (user && isCompare) {
 			const { password, hashRt, role, ...result } = user;
 			return result;
@@ -39,7 +43,11 @@ export class AuthService {
 	}
 
 	// Login user
+<<<<<<< HEAD
 	async logIn(dto: AuthGuardDto) {
+=======
+	async logIn(dto: AuthGuardDto): Promise<any[]> {
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 		const { access_token, refresh_token } = await this.getTokens({
 			id: dto.id,
 			username: dto.username,
@@ -51,6 +59,17 @@ export class AuthService {
 	// Logout user
 	async logout(dto: AuthGuardDto) {
 		await this.userRepository.update({ id: dto.id }, { hashRt: null });
+<<<<<<< HEAD
+=======
+	}
+
+	// Get Profile User
+	async getProfileUser(dto: AuthGuardDto): Promise<any[]> {
+		const { password, hashRt, ...result } = await this.userRepository.findOne({
+			where: { id: dto.id },
+		});
+		return [result];
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 	}
 
 	// Register user
@@ -66,14 +85,24 @@ export class AuthService {
 	}
 
 	// Refresh token
+<<<<<<< HEAD
 	async getRefreshToken(dto: GetRefreshTokenDto) {
+=======
+	async getRefreshToken(dto: GetRefreshTokenDto): Promise<any[]> {
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 		const user = await this.userRepository.findOne({
 			where: { id: dto.id },
 		});
 		if (!user || !user.hashRt) throw new ForbiddenException('Access denied');
 
+<<<<<<< HEAD
 		const isCompare = bcrypt.compare(dto.refresh_token, user.hashRt);
 		if (!isCompare) throw new ForbiddenException('Access denied');
+=======
+		this.logger.log(dto.refresh_token);
+		if (user.hashRt === dto.refresh_token)
+			throw new ForbiddenException('Access denied');
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 
 		const { access_token, refresh_token } = await this.getTokens({
 			id: user.id,
@@ -91,7 +120,11 @@ export class AuthService {
 		const jwtPayload = { username: dto.username, sub: dto.id };
 
 		const at = await this.jwtService.signAsync(jwtPayload, {
+<<<<<<< HEAD
 			expiresIn: '1m',
+=======
+			expiresIn: '30s',
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 		});
 		const rt = await this.jwtService.signAsync(jwtPayload, {
 			expiresIn: '7d',

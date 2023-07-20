@@ -1,16 +1,33 @@
+<<<<<<< HEAD
 import "./assets/main.css"
 
+=======
+>>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 
 import App from "./App.vue"
 import router from "./router"
 import store from "./store"
+import { library } from "@fortawesome/fontawesome-svg-core"
+
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+
+import { faUserSecret } from "@fortawesome/free-solid-svg-icons"
+import {
+	faFacebook,
+	faInstagram,
+	faTwitter,
+} from "@fortawesome/free-brands-svg-icons"
+
+/* add icons to the library */
+library.add(faUserSecret, faTwitter, faInstagram, faFacebook)
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 app.use(store)
+app.component("font-awesome-icon", FontAwesomeIcon)
 
 app.mount("#app")
