@@ -1,14 +1,8 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import {
-	CreatePostDto,
-	DeletePostById,
-	FindPostByIdDto,
-	FindPostByPageLimit,
-	FindPostDto,
-} from './dto/post.dto';
+import { CreatePostDto, DeletePostById, FindPostListDto } from './dto/post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../../entities/post.entity';
-import { EntityManager, Like, Repository } from 'typeorm';
+import { IsNull, Like, Not, Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
 
 @Injectable()
@@ -36,33 +30,10 @@ export class PostService {
 		}
 	}
 
-	// Find Blog to Search
-	async findPost(dto: FindPostDto): Promise<object> {
-		const post = await this.postRepository.find({
-			select: {
-				id: true,
-				title: true,
-				createAt: true,
-				user: {
-					username: true,
-				},
-			},
-			relations: { user: true },
-			where: [
-				{
-					title: Like(`%${dto}%`),
-				},
-			],
-			order: {
-				createAt: 'DESC',
-			},
-		});
-		return { data: post };
-	}
-
-	//Find Post for start to read
-	async FindPostRead(dto: FindPostByIdDto): Promise<object> {
-		const post = await this.postRepository.find({
+	// Find Blog List
+	async findPost(dto: FindPostListDto): Promise<object> {
+		const { id, title, page, limit } = dto;
+		const data = await this.postRepository.find({
 			select: {
 				id: true,
 				title: true,
@@ -73,32 +44,14 @@ export class PostService {
 				},
 			},
 			relations: { user: true },
-			where: { id: dto.id },
-		});
-		return post;
-	}
-
-	// Find post by page and limit
-	async FindPostByPageLimit(dto: FindPostByPageLimit): Promise<object> {
-		const { page, limit } = dto;
-		const post = await this.postRepository.find({
-			select: {
-				id: true,
-				title: true,
-				post: true,
-				createAt: true,
-				user: {
-					username: true,
-				},
-			},
-			relations: { user: true },
-			skip: (page - 1) * limit,
-			take: limit,
+			where: { id: id || Not(IsNull()), title: Like(`%${title || ''}%`) },
+			skip: (page - 1) * limit || 0,
+			take: limit || 5,
 			order: {
 				createAt: 'DESC',
 			},
 		});
-		return post;
+		return data;
 	}
 
 	// Delete post by Id

@@ -1,7 +1,6 @@
 import {
 	Controller,
 	Post,
-	UseGuards,
 	Logger,
 	Req,
 	HttpStatus,
@@ -14,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto, FindPostDto } from './dto/post.dto';
-import { Request, Response, query } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('post')
 export class PostController {
@@ -35,34 +34,12 @@ export class PostController {
 			message: 'Successfully',
 		});
 	}
-
-	// Find Blog for search
-	@Get()
-	async findPost(
-		@Req() req: Request,
-		@Res() res: Response,
-		dto: FindPostDto,
-	): Promise<Response> {
-		dto = req.body.title;
-		return res.json(await this.postService.findPost(dto));
-	}
-	// Find Blog use page and limit
-	@Get('page')
-	async findPostByPageLimit(@Query() query, @Res() res: Response) {
-		const data = await this.postService.FindPostByPageLimit(query);
-		return res.json({
-			data,
-			message: 'Successfully!',
-		});
-	}
-	// Find Blog for get start to read
-	@Get('/:id')
-	async findPostByTitle(
-		@Param('id') id: number,
-		@Res() res: Response,
-	): Promise<object> {
-		const post = await this.postService.FindPostRead({ id });
-		return res.json({ data: post, message: 'Successfully!' });
+	// Find blog list
+	@Post()
+	async findPostList(@Req() req: Request, @Res() res: Response) {
+		const data = await this.postService.findPost(req.body);
+		this.logger.log(data);
+		return res.json({ data, message: 'Successfully' });
 	}
 
 	// Delete Blog using id
