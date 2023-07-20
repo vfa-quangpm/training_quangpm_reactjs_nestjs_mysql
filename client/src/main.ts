@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import "./assets/main.css"
-
-=======
->>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 
