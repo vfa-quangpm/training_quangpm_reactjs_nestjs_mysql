@@ -5,7 +5,7 @@ import axios, {
 import dayjs from "dayjs"
 import jwtDecode, { type JwtPayload } from "jwt-decode"
 
-const baseURL = import.meta.env.VITE_BASE_URL
+const baseURL = import.meta.env.API_URL
 
 const axiosClient = axios.create({
 	baseURL,
