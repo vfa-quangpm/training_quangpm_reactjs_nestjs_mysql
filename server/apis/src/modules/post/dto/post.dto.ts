@@ -14,8 +14,12 @@ export interface CreatePostDto {
 	userId: number;
 }
 export interface FindPostDto {
-	id: number;
 	title: string;
+}
+export interface FindPostByIdDto {
+	id: number;
+}
+export interface FindPostByPageLimit {
 	page: number;
 	limit: number;
 }

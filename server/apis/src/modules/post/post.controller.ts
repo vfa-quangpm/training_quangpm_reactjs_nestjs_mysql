@@ -14,9 +14,7 @@ import {
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto, FindPostDto } from './dto/post.dto';
-import { AuthGuard } from '../auth/auth.guard';
 import { Request, Response, query } from 'express';
-import { QueryResult } from 'typeorm';
 
 @Controller('post')
 export class PostController {
@@ -26,7 +24,6 @@ export class PostController {
 	// Create Blog
 	@Post('create')
 	@HttpCode(HttpStatus.OK)
-	@UseGuards(AuthGuard)
 	async createPost(
 		@Req() req: Request,
 		@Res() res: Response,
@@ -45,20 +42,14 @@ export class PostController {
 		@Req() req: Request,
 		@Res() res: Response,
 		dto: FindPostDto,
-	): Promise<object> {
-		dto = { id: null, title: req.body?.title, page: 1, limit: 10 };
-		const posts = await this.postService.findPost(dto);
-		return res.json({ data: posts, message: 'Successfully' });
+	): Promise<Response> {
+		dto = req.body.title;
+		return res.json(await this.postService.findPost(dto));
 	}
 	// Find Blog use page and limit
 	@Get('page')
-	async findPostByPageLimit(
-		@Query() query,
-		@Res() res: Response,
-		dto: FindPostDto,
-	) {
-		dto = { id: null, title: '', ...query };
-		const data = await this.postService.findPost(dto);
+	async findPostByPageLimit(@Query() query, @Res() res: Response) {
+		const data = await this.postService.FindPostByPageLimit(query);
 		return res.json({
 			data,
 			message: 'Successfully!',
@@ -69,19 +60,13 @@ export class PostController {
 	async findPostByTitle(
 		@Param('id') id: number,
 		@Res() res: Response,
-		dto: FindPostDto,
 	): Promise<object> {
-		dto = { id, title: '', page: 1, limit: 1 };
-		const data = await this.postService.findPost(dto);
-		return res.json({
-			data,
-			message: 'Successfully!',
-		});
+		const post = await this.postService.FindPostRead({ id });
+		return res.json({ data: post, message: 'Successfully!' });
 	}
 
 	// Delete Blog using id
 	@Delete(`/:id`)
-	@UseGuards(AuthGuard)
 	async deletePostById(
 		@Param(`id`) id: number,
 		@Res() res: Response,

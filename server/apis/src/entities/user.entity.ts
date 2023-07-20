@@ -34,6 +34,13 @@ export class User implements UserDto, CreateUserDto {
 	password: string;
 
 	@Column({
+		name: 'hashRt',
+		type: 'varchar',
+		nullable: true,
+	})
+	hashRt: string;
+
+	@Column({
 		name: 'Role',
 		type: 'enum',
 		enum: UserRole,
