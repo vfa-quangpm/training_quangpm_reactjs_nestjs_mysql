@@ -9,31 +9,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Post = void 0;
-const user_entity_1 = require("../../user/entities/user.entity");
+exports.Comment = void 0;
 const typeorm_1 = require("typeorm");
-let Post = exports.Post = class Post {
+const user_entity_1 = require("./user.entity");
+const post_entity_1 = require("./post.entity");
+let Comment = exports.Comment = class Comment {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", Number)
-], Post.prototype, "id", void 0);
+], Comment.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (author) => author.id),
+    __metadata("design:type", user_entity_1.User)
+], Comment.prototype, "authorId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => post_entity_1.Post, (post) => post.id),
+    __metadata("design:type", post_entity_1.Post)
+], Comment.prototype, "postId", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        name: 'Title',
-        type: 'varchar',
-        length: 50,
-        unique: true,
-    }),
-    __metadata("design:type", String)
-], Post.prototype, "title", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        name: 'Post',
+        name: 'Comment',
         type: 'text',
     }),
     __metadata("design:type", String)
-], Post.prototype, "post", void 0);
+], Comment.prototype, "comment", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         name: 'CreateAt',
@@ -41,21 +41,16 @@ __decorate([
         default: () => 'CURRENT_TIMESTAMP',
     }),
     __metadata("design:type", Date)
-], Post.prototype, "createAt", void 0);
+], Comment.prototype, "createAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         name: 'UpdateAt',
         type: 'datetime',
         update: true,
-        nullable: true,
     }),
     __metadata("design:type", Date)
-], Post.prototype, "updateAt", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.posts),
-    __metadata("design:type", user_entity_1.User)
-], Post.prototype, "user", void 0);
-exports.Post = Post = __decorate([
+], Comment.prototype, "updateAt", void 0);
+exports.Comment = Comment = __decorate([
     (0, typeorm_1.Entity)()
-], Post);
-//# sourceMappingURL=post.entity.js.map
+], Comment);
+//# sourceMappingURL=comment.entity.js.map

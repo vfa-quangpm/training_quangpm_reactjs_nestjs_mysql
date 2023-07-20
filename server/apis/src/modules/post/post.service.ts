@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { CreatePostDto, PostDto } from './dto/post.dto';
+import { CreatePostDto, DeletePostById, FindPostDto } from './dto/post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from './entities/post.entity';
-import { InsertResult, Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
+import { Post } from '../../entities/post.entity';
+import { EntityManager, IsNull, Like, Repository, Not } from 'typeorm';
+import { User } from '../../entities/user.entity';
 
 @Injectable()
 export class PostService {
@@ -28,5 +28,39 @@ export class PostService {
 				description: 'Have a good day',
 			});
 		}
+	}
+
+	// Find Post
+	async findPost(dto: FindPostDto): Promise<object> {
+		this.logger.log(dto);
+		const post = await this.postRepository.find({
+			select: {
+				id: true,
+				title: true,
+				createAt: true,
+				user: {
+					username: true,
+				},
+			},
+			relations: { user: true },
+			where: [
+				{
+					id: dto.id || Not(IsNull()),
+					title: Like(`%${dto.title}%`),
+				},
+			],
+			skip: (dto.page - 1) * dto.limit,
+			take: dto.limit,
+			order: {
+				createAt: 'DESC',
+			},
+		});
+		return post;
+	}
+
+	// Delete post by Id
+	async DeletePostById(dto: DeletePostById): Promise<object> {
+		const data = await this.postRepository.delete({ id: dto.id });
+		return data;
 	}
 }

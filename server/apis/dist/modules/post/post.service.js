@@ -16,9 +16,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const post_entity_1 = require("./entities/post.entity");
+const post_entity_1 = require("../../entities/post.entity");
 const typeorm_2 = require("typeorm");
-const user_entity_1 = require("../user/entities/user.entity");
+const user_entity_1 = require("../../entities/user.entity");
 let PostService = exports.PostService = PostService_1 = class PostService {
     constructor(postRepository, userRepository) {
         this.postRepository = postRepository;
@@ -39,6 +39,36 @@ let PostService = exports.PostService = PostService_1 = class PostService {
                 description: 'Have a good day',
             });
         }
+    }
+    async findPost(dto) {
+        this.logger.log(dto);
+        const post = await this.postRepository.find({
+            select: {
+                id: true,
+                title: true,
+                createAt: true,
+                user: {
+                    username: true,
+                },
+            },
+            relations: { user: true },
+            where: [
+                {
+                    id: dto.id || (0, typeorm_2.Not)((0, typeorm_2.IsNull)()),
+                    title: (0, typeorm_2.Like)(`%${dto.title}%`),
+                },
+            ],
+            skip: (dto.page - 1) * dto.limit,
+            take: dto.limit,
+            order: {
+                createAt: 'DESC',
+            },
+        });
+        return post;
+    }
+    async DeletePostById(dto) {
+        const data = await this.postRepository.delete({ id: dto.id });
+        return data;
     }
 };
 exports.PostService = PostService = PostService_1 = __decorate([

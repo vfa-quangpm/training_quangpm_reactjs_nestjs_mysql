@@ -1,6 +1,6 @@
-import { CreateUserDto, UserDto } from '../dto';
-import { Post } from '../../post/entities/post.entity';
-import { Comment } from '../../comment/entities/comment.entity';
+import { CreateUserDto, UserDto } from '../modules/user/dto';
+import { Post } from './post.entity';
+import { Comment } from './comment.entity';
 export declare enum UserRole {
     ADMIN = "admin",
     USER = "user"

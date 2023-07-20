@@ -11,8 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
-const post_entity_1 = require("../../post/entities/post.entity");
-const comment_entity_1 = require("../../comment/entities/comment.entity");
+const post_entity_1 = require("./post.entity");
+const comment_entity_1 = require("./comment.entity");
 var UserRole;
 (function (UserRole) {
     UserRole["ADMIN"] = "admin";
