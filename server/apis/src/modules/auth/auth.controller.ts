@@ -4,10 +4,7 @@ import {
 	Get,
 	HttpCode,
 	HttpStatus,
-<<<<<<< HEAD
-=======
 	Logger,
->>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 	Post,
 	Request,
 	Response,
@@ -29,27 +26,6 @@ export class AuthController {
 	@Post('login')
 	@HttpCode(HttpStatus.OK)
 	async login(@Request() req, @Response() res) {
-<<<<<<< HEAD
-		const data = await this.authService.logIn(req.user);
-		return res.json({ data, success: true });
-	}
-	// Logout user
-	@UseGuards(AtGuard)
-	@Get('logout')
-	@HttpCode(HttpStatus.OK)
-	async logout(@Request() req, @Response() res) {
-		await this.authService.logout(req.user);
-		return res.json({ success: true });
-	}
-	//Refresh Token
-	@UseGuards(RtGuard)
-	@Get('refresh')
-	async getRefreshToken(@Request() req, @Response() res) {
-		const data = await this.authService.getRefreshToken(req.user);
-		return res.json({ data, message: true });
-	}
-	// Register USer
-=======
 		this.logger.log(req.user);
 		const data = await this.authService.logIn(req.user);
 		return res.json({ data, message: 'Successfully!' });
@@ -77,7 +53,6 @@ export class AuthController {
 		return res.json({ data, message: 'Successfully!' });
 	}
 	//Register User
->>>>>>> ebedce8575e42d7b7615445c9c5d1e736f2b7417
 	@Post('register')
 	@HttpCode(HttpStatus.OK)
 	async register(@Body() dto: RegisterDto, @Response() res) {
