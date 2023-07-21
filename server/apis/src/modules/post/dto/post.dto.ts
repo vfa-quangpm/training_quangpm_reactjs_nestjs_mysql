@@ -13,6 +13,14 @@ export interface CreatePostDto {
 	post: string;
 	userId: number;
 }
+
+export interface FindPostListDto {
+	id: number;
+	title?: string;
+	userId?: number;
+	page?: number;
+	limit?: number;
+}
 export interface FindPostDto {
 	title: string;
 }
