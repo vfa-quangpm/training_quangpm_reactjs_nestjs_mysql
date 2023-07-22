@@ -1,10 +1,4 @@
-import {
-	Column,
-	Entity,
-	ManyToOne,
-	OneToMany,
-	PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateUserDto, UserDto } from '../modules/user/dto';
 import { Post } from './post.entity';
 import { Comment } from './comment.entity';
@@ -14,7 +8,7 @@ export enum UserRole {
 	USER = 'user',
 }
 
-@Entity()
+@Entity('users')
 export class User implements UserDto, CreateUserDto {
 	@PrimaryGeneratedColumn('uuid')
 	id: number;

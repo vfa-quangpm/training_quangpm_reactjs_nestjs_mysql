@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { categoryModule } from './modules/category/category.module';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 		PostModule,
 		CommentModule,
 		AuthModule,
+		categoryModule,
 	],
 	controllers: [],
 	providers: [],

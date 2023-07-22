@@ -1,14 +1,18 @@
 import { User } from './user.entity';
 import {
 	Column,
+	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	ManyToMany,
 	ManyToOne,
 	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
 import { PostDto } from '../modules/post/dto/post.dto';
+import { Category } from './category.entity';
 
-@Entity()
+@Entity('posts')
 export class Post implements PostDto {
 	@PrimaryGeneratedColumn('uuid')
 	id: number;
@@ -27,22 +31,20 @@ export class Post implements PostDto {
 	})
 	post: string;
 
-	@Column({
-		name: 'CreateAt',
-		type: 'datetime',
-		default: () => 'CURRENT_TIMESTAMP',
-	})
+	@CreateDateColumn({ name: 'createAt' })
 	createAt: Date;
 
-	@Column({
-		name: 'UpdateAt',
-		type: 'datetime',
-		update: true,
-		nullable: true,
-	})
+	@UpdateDateColumn({ name: 'updateAt' })
 	updateAt: Date;
 
 	@ManyToOne(() => User, (user) => user.posts)
-	@JoinColumn()
+	@JoinColumn({
+		name: 'user_id',
+		referencedColumnName: 'id',
+		foreignKeyConstraintName: 'fk_post_user_id',
+	})
 	user: User;
+
+	@ManyToMany(() => Category, (category) => category.posts)
+	categories: Category[];
 }
