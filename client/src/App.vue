@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
-
+<script setup lang="ts">
+	import HeaderComponent from "./components/HeaderComponent.vue"
+</script>
 <template>
-	<div>hello world</div>
+	<HeaderComponent />
+
+	<section style="height: 100vh" />
 </template>
+<style src="./scss/styles.scss" lang="scss"></style>

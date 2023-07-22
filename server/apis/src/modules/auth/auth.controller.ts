@@ -4,6 +4,7 @@ import {
 	Get,
 	HttpCode,
 	HttpStatus,
+	Logger,
 	Post,
 	Request,
 	Response,
@@ -17,6 +18,7 @@ import { RtGuard } from './guards/rt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
+	private readonly logger = new Logger();
 	constructor(private authService: AuthService) {}
 
 	// Login user
@@ -24,8 +26,9 @@ export class AuthController {
 	@Post('login')
 	@HttpCode(HttpStatus.OK)
 	async login(@Request() req, @Response() res) {
+		this.logger.log(req.user);
 		const data = await this.authService.logIn(req.user);
-		return res.json({ data, success: true });
+		return res.json({ data, message: 'Successfully!' });
 	}
 	// Logout user
 	@UseGuards(AtGuard)
@@ -33,16 +36,23 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	async logout(@Request() req, @Response() res) {
 		await this.authService.logout(req.user);
-		return res.json({ success: true });
+		return res.json({ message: 'Successfully!' });
 	}
 	//Refresh Token
 	@UseGuards(RtGuard)
 	@Get('refresh')
 	async getRefreshToken(@Request() req, @Response() res) {
 		const data = await this.authService.getRefreshToken(req.user);
-		return res.json({ data, message: true });
+		return res.json({ data, message: 'Successfully!' });
 	}
-	// Register USer
+	//Get profile User
+	@UseGuards(AtGuard)
+	@Get('profile')
+	async getProfileUser(@Request() req, @Response() res) {
+		const data = await this.authService.getProfileUser(req.user);
+		return res.json({ data, message: 'Successfully!' });
+	}
+	//Register User
 	@Post('register')
 	@HttpCode(HttpStatus.OK)
 	async register(@Body() dto: RegisterDto, @Response() res) {

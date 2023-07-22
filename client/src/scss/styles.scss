@@ -8,4 +8,10 @@
 @import "./variables";
 
 //Layout
-@import "./layout/grid.scss";
+@import "./layout/grid";
+@import "./layout/_header";
+
+//Components
+@import "./components/navigation";
+@import "./components/Auth/profilecomponent";
+@import "./components/Auth/loginRegister";
