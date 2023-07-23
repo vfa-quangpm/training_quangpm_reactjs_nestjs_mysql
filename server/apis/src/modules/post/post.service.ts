@@ -47,7 +47,6 @@ export class PostService {
 			select: {
 				id: true,
 				title: true,
-				post: true,
 				createAt: true,
 				user: {
 					username: true,
