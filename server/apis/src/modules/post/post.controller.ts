@@ -10,6 +10,7 @@ import {
 	Param,
 	Query,
 	Delete,
+	Body,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto, FindPostDto } from './dto/post.dto';
@@ -40,6 +41,11 @@ export class PostController {
 		const data = await this.postService.findPost(req.body);
 		this.logger.log(data);
 		return res.json({ data, message: 'Successfully' });
+	}
+	@Post('id')
+	async findPostById(@Body() body: { id: number }, @Res() res) {
+		const data = await this.postService.findPostById(body);
+		return res.json({ data, message: 'Successfully!' });
 	}
 
 	// Delete Blog using id

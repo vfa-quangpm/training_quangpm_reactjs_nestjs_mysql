@@ -24,5 +24,9 @@ app.use(createPinia())
 app.use(router)
 app.use(store)
 app.component("font-awesome-icon", FontAwesomeIcon)
+app.directive("theme", (el, binding) => {
+	if (binding.value.isFocus) el.style.backgroundColor = binding.value.colorFocus
+	else el.style.backgroundColor = binding.value.colorNotFocus
+})
 
 app.mount("#app")

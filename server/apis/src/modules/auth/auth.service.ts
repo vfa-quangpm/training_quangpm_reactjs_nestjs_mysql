@@ -75,13 +75,14 @@ export class AuthService {
 
 	// Refresh token
 	async getRefreshToken(dto: GetRefreshTokenDto): Promise<any[]> {
+		this.logger.log(dto);
 		const user = await this.userRepository.findOne({
 			where: { id: dto.id },
 		});
 		if (!user || !user.hashRt) throw new ForbiddenException('Access denied');
 
 		this.logger.log(dto.refresh_token);
-		if (user.hashRt === dto.refresh_token)
+		if (user.hashRt !== dto.refresh_token)
 			throw new ForbiddenException('Access denied');
 
 		const { access_token, refresh_token } = await this.getTokens({

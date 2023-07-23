@@ -37,7 +37,6 @@ export class PostService {
 			select: {
 				id: true,
 				title: true,
-				post: true,
 				createAt: true,
 				user: {
 					username: true,
@@ -51,6 +50,12 @@ export class PostService {
 				createAt: 'DESC',
 			},
 		});
+		return data;
+	}
+
+	// Find Blog By Id
+	async findPostById(dto: { id: number }): Promise<object> {
+		const data = await this.postRepository.findOne({ where: { id: dto.id } });
 		return data;
 	}
 

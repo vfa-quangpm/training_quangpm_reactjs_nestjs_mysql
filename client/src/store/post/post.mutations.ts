@@ -10,5 +10,16 @@ const postMutations = {
 			state.postList = [...state.postList, ...payload]
 		}
 	},
+	postById(state: IPostState, payload: any) {
+		if (payload) {
+			state.post = {
+				id: payload.id,
+				title: payload.title,
+				categories: payload.categories,
+				content: payload.post,
+				createAt: payload.createAt,
+			}
+		}
+	},
 }
 export default postMutations
