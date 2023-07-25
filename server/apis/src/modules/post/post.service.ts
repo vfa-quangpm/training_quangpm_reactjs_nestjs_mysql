@@ -64,6 +64,12 @@ export class PostService {
 		return data;
 	}
 
+	// Find Blog By Id
+	async findPostById(dto: { id: number }): Promise<object> {
+		const data = await this.postRepository.findOne({ where: { id: dto.id } });
+		return data;
+	}
+
 	// Delete post by Id
 	async DeletePostById(dto: DeletePostById): Promise<object> {
 		const data = await this.postRepository.delete({ id: dto.id });

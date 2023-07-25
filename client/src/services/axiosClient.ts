@@ -9,7 +9,7 @@ const baseURL = import.meta.env.VITE_API_URL
 
 const axiosClient = axios.create({
 	baseURL,
-	timeout: 3000,
+	timeout: 10000,
 	headers: {
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type": "application/json",
@@ -39,7 +39,6 @@ axiosClient.interceptors.request.use(async function (
 			Authorization: `Bearer ${token.refresh_token}`,
 		},
 	})
-
 	localStorage.setItem("token", JSON.stringify(data.data[0]))
 	config.headers["Authorization"] = `Bearer ${data.data[0].access_token}`
 	return config

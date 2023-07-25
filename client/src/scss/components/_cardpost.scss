@@ -1,10 +1,12 @@
 .card {
 	&__container {
 		width: 90%;
-		height: 360px;
+		height: 160px;
 
 		margin-bottom: 48px;
-
+		padding: 10px;
+		border: 1px solid gray;
+		border-radius: 8px;
 		h2 {
 			font-family: PT Serif;
 			font-size: 18px;

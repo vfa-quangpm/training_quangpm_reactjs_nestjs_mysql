@@ -6,25 +6,25 @@
 	import { useEventListener } from "@/composables/useEvent"
 	const store = useStore()
 	const obj = reactive<{ postList?: IPostItem[]; page: number }>({
-		postList: store.getters["post/getPostList"],
+		postList: [],
 		page: 1,
 	})
-	store.commit("post/reset")
 	onBeforeMount(async () => {
-		await store.dispatch("post/postList", { page: obj.page, limit: 3 })
+		store.commit("post/reset")
+		await store.dispatch("post/postList", { page: obj.page, limit: 1 })
 		obj.postList = store.getters["post/getPostList"]
 	})
 	const handleScroll = async () => {
 		const heightBody = document.body.scrollHeight
 		const scrollYEnd = window.scrollY + window.innerHeight
 		if (scrollYEnd > heightBody + 100) {
+			obj.page++
 			await store.dispatch(
 				"post/postList",
-				{ page: obj.page, limit: 3 },
+				{ page: obj.page, limit: 1 },
 				{ root: true }
 			)
 			obj.postList = store.getters["post/getPostList"]
-			obj.page++
 		}
 	}
 	useEventListener(window, "scroll", handleScroll)

@@ -8,6 +8,7 @@ import {
 	Res,
 	Param,
 	Delete,
+	Body,
 	UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
@@ -39,6 +40,11 @@ export class PostController {
 	async findPostList(@Req() req: Request, @Res() res: Response) {
 		const data = await this.postService.findPost(req.body);
 		return res.json({ data, message: 'Successfully' });
+	}
+	@Post('id')
+	async findPostById(@Body() body: { id: number }, @Res() res) {
+		const data = await this.postService.findPostById(body);
+		return res.json({ data, message: 'Successfully!' });
 	}
 
 	// Delete Blog using id

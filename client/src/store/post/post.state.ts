@@ -8,19 +8,25 @@ export interface IPostItem {
 	} | null
 }
 export interface IPost {
+	id?: number
+	title?: string
+	categories?: string[]
+	content?: string
+	user?: string
+	createAt?: Date
+}
+export interface ICategory {
 	id: number
-	title: string
-	category: string[]
-	content: string
-	user: string
-	createAt: Date
+	category: string
 }
 export interface IPostState {
-	post: IPost | null
+	post?: IPost
 	postList: IPostItem[]
+	categories: ICategory[]
 }
 const postState = (): IPostState => ({
-	post: null,
+	post: undefined,
 	postList: [],
+	categories: [],
 })
 export default postState

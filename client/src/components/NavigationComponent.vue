@@ -1,13 +1,13 @@
 <script setup lang="ts">
-	import { onBeforeUpdate } from "vue"
+	import { onBeforeMount, onBeforeUpdate } from "vue"
 	import { RouterLink } from "vue-router"
 	import { useStore } from "vuex"
 	import LoginRegisterComponent from "./AuthComponent/LoginRegisterComponent.vue"
 	import ProfileComponent from "./AuthComponent/ProfileComponent.vue"
 
 	const store = useStore()
-	onBeforeUpdate(() => {
-		store.dispatch("auth/authProfile", { root: true })
+	onBeforeMount(() => {
+		store.dispatch("auth/authProfile", {}, { root: true })
 	})
 </script>
 <template>
@@ -34,6 +34,9 @@
 			<RouterLink class="nav__link--items" to="/home"> Home</RouterLink>
 			<RouterLink class="nav__link--items" to="/about"> About</RouterLink>
 			<RouterLink class="nav__link--items" to="/contact"> Contact</RouterLink>
+			<RouterLink class="nav__link--items" to="/post/new">
+				Create Post</RouterLink
+			>
 			<LoginRegisterComponent v-if="store.state.auth.id === null" />
 			<ProfileComponent v-else />
 		</div>
