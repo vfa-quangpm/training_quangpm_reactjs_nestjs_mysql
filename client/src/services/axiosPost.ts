@@ -16,5 +16,7 @@ const axiosPost = {
 	axiosPostCreatePost: (dto: ICreatePost) =>
 		axiosClient.post("post/create", dto),
 	axiosPostById: (dto: { id: number }) => axiosClient.post("post/id", dto),
+	axiosPostCategories: (dto: { category: number }) =>
+		axiosClient.post("category", dto),
 }
 export default axiosPost

@@ -16,9 +16,6 @@
 		</button>
 		<ul class="profile__items" v-show="isShowProfile">
 			<li class="profile__items--item" @click="register">Log Out</li>
-			<li class="profile__items--item">Log Out</li>
-			<li class="profile__items--item">Log Out</li>
-			<li class="profile__items--item">Log Out</li>
 		</ul>
 	</div>
 </template>

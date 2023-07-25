@@ -32,10 +32,10 @@
 
 		&--item {
 			width: 100%;
-
 			padding: 10px 0;
 			border-radius: 10px;
 			text-align: center;
+			list-style-type: none;
 			&:hover {
 				background-color: #9db2bf;
 				cursor: pointer;

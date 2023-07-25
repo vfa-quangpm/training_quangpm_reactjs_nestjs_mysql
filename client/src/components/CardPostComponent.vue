@@ -6,11 +6,9 @@
 	const props = defineProps<{ post: IPostItem }>()
 	const { post } = toRefs(props)
 	const date = dayjs(post.value.createAt).format("DD/MM/YYYY")
-	console.log(post.value.id)
 </script>
 <template>
 	<article class="card__container">
-		<img src="../assets/nao.jpeg" height="180" width="320" />
 		<h2>
 			<RouterLink :to="`/post/${post.id}`">
 				{{ post.title }}

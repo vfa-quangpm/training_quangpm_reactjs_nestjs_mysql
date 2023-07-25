@@ -1,7 +1,8 @@
 <script setup lang="ts">
 	import { Marked } from "marked"
-	import { reactive, ref } from "vue"
+	import { onBeforeMount, reactive, ref } from "vue"
 	import { useStore } from "vuex"
+	import type { ICategory } from "@/store/post/post.state"
 	const textarea = ref<HTMLTextAreaElement>(document.createElement("textarea"))
 	const marked = new Marked({ headerIds: false })
 	const store = useStore()
@@ -14,6 +15,8 @@
 		markdown: "",
 		categories: [],
 	})
+	const acceptBlog = ref<boolean>()
+	const categories = ref<ICategory[]>()
 	const resize = () => {
 		textarea.value.style.height = "20px"
 		textarea.value.style.height = textarea.value.scrollHeight + "px"
@@ -23,10 +26,11 @@
 		post.markdown = ""
 		post.categories = []
 		textarea.value.style.height = "20px"
+		acceptBlog.value = undefined
 	}
 	const handleSubmit = async (event: any) => {
 		event.preventDefault()
-		const message = await store.dispatch(
+		const { message } = await store.dispatch(
 			"post/createPost",
 			{
 				title: post.title,
@@ -37,7 +41,9 @@
 				root: true,
 			}
 		)
-		console.log(message)
+		reset()
+		if (message === "Successfully") acceptBlog.value = true
+		else acceptBlog.value = false
 	}
 	const handleCategories = (event: any) => {
 		if (!post.categories.includes(event.target.textContent))
@@ -47,11 +53,14 @@
 				(state) => state !== event.target.textContent
 			)
 	}
-	const categories = [
-		{ id: 1, category: "blog" },
-		{ id: 2, category: "van hoa" },
-		{ id: 3, category: "it" },
-	]
+	onBeforeMount(async () => {
+		await store.dispatch(
+			"post/findCategories",
+			{ category: "" },
+			{ root: true }
+		)
+		categories.value = store.state.post.categories
+	})
 </script>
 <template>
 	<main class="write__main grid-cols-2">
@@ -83,9 +92,11 @@
 					</span>
 				</p>
 				<div>
-					<button @click="reset">Reset</button>
+					<button @click="reset" type="reset">Reset</button>
 					<button type="submit">Gửi</button>
 				</div>
+				<p v-if="acceptBlog === false">Có lỗi xảy ra rồi nè</p>
+				<p v-else-if="acceptBlog === true">Tạo thành công rồi đó!</p>
 			</form>
 		</article>
 		<article class="write__show" v-html="marked.parse(post.markdown)"></article>
