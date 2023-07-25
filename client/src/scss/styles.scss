@@ -10,8 +10,10 @@
 //Layout
 @import "./layout/grid";
 @import "./layout/_header";
+@import "./layout/_main";
 
 //Components
+@import "./components/cardpost";
 @import "./components/navigation";
 @import "./components/Auth/profilecomponent";
 @import "./components/Auth/loginRegister";

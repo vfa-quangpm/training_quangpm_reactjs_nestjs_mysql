@@ -5,7 +5,7 @@ import axios, {
 import dayjs from "dayjs"
 import jwtDecode, { type JwtPayload } from "jwt-decode"
 
-const baseURL = import.meta.env.API_URL
+const baseURL = import.meta.env.VITE_API_URL
 
 const axiosClient = axios.create({
 	baseURL,
@@ -48,7 +48,6 @@ axiosClient.interceptors.request.use(async function (
 axiosClient.interceptors.response.use(function (response: AxiosResponse) {
 	if (response && response.data) return response.data
 	console.log(response)
-
 	return response
 })
 
