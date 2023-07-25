@@ -9,9 +9,10 @@ export interface PostDto {
 	user: User;
 }
 export interface CreatePostDto {
+	id: number;
 	title: string;
 	post: string;
-	userId: number;
+	categories: string[];
 }
 
 export interface FindPostListDto {
@@ -20,16 +21,6 @@ export interface FindPostListDto {
 	userId?: number;
 	page?: number;
 	limit?: number;
-}
-export interface FindPostDto {
-	title: string;
-}
-export interface FindPostByIdDto {
-	id: number;
-}
-export interface FindPostByPageLimit {
-	page: number;
-	limit: number;
 }
 export interface DeletePostById {
 	id: number;
