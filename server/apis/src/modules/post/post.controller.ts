@@ -9,6 +9,7 @@ import {
 	Param,
 	Delete,
 	Body,
+	UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/post.dto';
