@@ -6,14 +6,14 @@ import {
 	HttpStatus,
 	HttpCode,
 	Res,
-	Get,
 	Param,
-	Query,
 	Delete,
+	UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto, FindPostDto } from './dto/post.dto';
+import { CreatePostDto } from './dto/post.dto';
 import { Request, Response } from 'express';
+import { AtGuard } from '../auth/guards/at-auth.guard';
 
 @Controller('post')
 export class PostController {
@@ -21,14 +21,14 @@ export class PostController {
 	constructor(private readonly postService: PostService) {}
 
 	// Create Blog
+	@UseGuards(AtGuard)
 	@Post('create')
 	@HttpCode(HttpStatus.OK)
 	async createPost(
 		@Req() req: Request,
 		@Res() res: Response,
-		dto: CreatePostDto,
 	): Promise<Response> {
-		dto = { userId: req['user'], ...req.body };
+		const dto: CreatePostDto = { id: req.user['id'], ...req.body };
 		await this.postService.createPost(dto);
 		return res.json({
 			message: 'Successfully',
@@ -38,7 +38,6 @@ export class PostController {
 	@Post()
 	async findPostList(@Req() req: Request, @Res() res: Response) {
 		const data = await this.postService.findPost(req.body);
-		this.logger.log(data);
 		return res.json({ data, message: 'Successfully' });
 	}
 
