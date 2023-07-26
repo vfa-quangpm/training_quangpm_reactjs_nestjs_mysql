@@ -94,7 +94,7 @@ $ npm run start:dev
 - Using post to create admin
 
   - APIs: http://localhost:{PORT}/api/v1/auth/register
-  - Method Post
+  - Method POST
     ```
     {
       "username": "quang",
@@ -102,6 +102,15 @@ $ npm run start:dev
       "role": "admin"
     }
     ```
+
+- Using post to create categories
+  - APIs: http://localhost:{PORT}/api/v1/category/create
+  - Method POST
+  ```
+  {
+    "category": "name category"
+  }
+  ```
 
 ## Information
 
