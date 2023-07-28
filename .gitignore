@@ -1,10 +1,11 @@
 #Output
 /node_modules
 /client/node_modules
+/client/package-lock.json
 /server/node_modules
 /server/apis/node_modules
-/server/apis/prisma/.env
 /server/apis/dist
+/server/apis/packagek-lock.json
 
 # Logs
 logs

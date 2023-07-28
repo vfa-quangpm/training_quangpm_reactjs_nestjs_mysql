@@ -14,7 +14,6 @@ const authActions = {
 		const token = localStorage.getItem("token")
 		if (token) {
 			const payload = await axiosAuth.axiosGetProfile()
-			console.log(payload)
 			context.commit("profile", payload.data[0])
 		}
 	},
